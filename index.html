@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Forge 728 — 727 weapons, three swings</title>
+<meta name="description" content="An armory game built from 727 pixel weapon icons and 18 animated monsters. Every damage number is measured from the sprite: max Feret diameter and ink mass." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=27" />
+<link rel="icon" href="assets/weapons/395.png" />
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="mark">
+      <span class="mark-forge">FORGE</span><span class="mark-num">728</span>
+    </div>
+    <div class="top-meta">
+      <span><b id="metaWeapons">727</b> weapons</span>
+      <span class="sep">·</span>
+      <span><b id="metaMonsters">18</b> monsters</span>
+      <span class="sep">·</span>
+      <span class="src">stats measured from pixels</span>
+    </div>
+    <div class="top-right">
+      <div class="score">
+        <span class="score-k">KILLS</span><span class="score-v" id="kills">0</span>
+        <span class="score-k">STREAK</span><span class="score-v" id="streak">0</span>
+      </div>
+      <button class="snd" id="snd" aria-pressed="true" title="Sound on/off">
+        <span class="snd-bars"><i></i><i></i><i></i></span>
+        <span class="snd-lab">SFX</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="stage-wrap">
+
+    <section class="arena" id="arena">
+      <div class="room" aria-hidden="true">
+        <div class="wall"></div>
+        <div class="spot" id="spot"></div>
+      </div>
+      <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+
+      <div class="hud">
+        <div class="hud-mon">
+          <span class="mon-name" id="monName">SLIME</span>
+          <span class="mon-tier" id="monTier">tier 01</span>
+        </div>
+        <div class="swings-wrap">
+          <span class="swings-k">SWINGS</span>
+          <div class="swings" id="swings" aria-label="swings left"></div>
+        </div>
+      </div>
+
+      <div class="yard" id="yard">
+        <div class="ghost-id" id="ghostId" aria-hidden="true">001</div>
+
+        <div class="pedestal" id="pedestal">
+          <img class="ped-shaft" id="pedShaft" src="assets/shaft-ember.png" alt="" aria-hidden="true" />
+          <div class="ped-arm" id="weaponArt"></div>
+          <img class="sigil" id="sigil" src="assets/sigil-ember.png" alt="" aria-hidden="true" />
+          <div class="ped-plate" id="pedPlate">#001 · EMBER</div>
+        </div>
+
+        <div class="mon-slot">
+          <div class="mon-hp">
+            <div class="hp"><div class="hp-chip" id="hpChip"></div><div class="hp-fill" id="hpFill"></div></div>
+            <span class="hp-num" id="hpNum">34 / 34</span>
+          </div>
+          <canvas id="monster" class="monster"></canvas>
+          <img class="mon-shadow" id="monShadow" src="assets/shadow.png" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="dmg-layer" id="dmgLayer" aria-hidden="true"></div>
+        <div class="flash" id="flash" aria-hidden="true"></div>
+        <div class="banner" id="banner" aria-live="polite"></div>
+      </div>
+
+      <div class="foot">
+        <div class="ledger" id="ledger">
+          <div class="led-top">
+            <span class="led-id" id="ledId">#001</span>
+            <span class="led-fam" id="ledFam">STEEL</span>
+            <span class="led-swatches" id="ledSwa"></span>
+          </div>
+          <div class="led-stats">
+            <div><span class="k">REACH</span><span class="v" id="ledLen">—</span></div>
+            <div><span class="k">MASS</span><span class="v" id="ledMass">—</span></div>
+            <div><span class="k">DMG</span><span class="v em" id="ledDmg">—</span></div>
+          </div>
+          <div class="led-note" id="ledNote">pick a weapon from the rack</div>
+        </div>
+
+        <button class="strike" id="strikeBtn">
+          <span class="strike-t">STRIKE</span>
+          <span class="strike-s" id="strikeSub">SPACE</span>
+        </button>
+      </div>
+    </section>
+
+    <aside class="rack" id="rack">
+      <div class="rack-head">
+        <div class="rack-row1">
+          <h2 class="rack-title">RACK <span id="rackCount">727</span></h2>
+          <div class="sort" id="sort">
+            <button data-sort="id" class="on">NO.</button>
+            <button data-sort="len">REACH</button>
+            <button data-sort="mass">MASS</button>
+            <button data-sort="dmg">DMG</button>
+          </div>
+        </div>
+        <div class="fams" id="fams"></div>
+        <label class="clearonly" id="clearWrap">
+          <input type="checkbox" id="clearOnly" />
+          <span>only weapons that clear this monster</span>
+          <b id="clearCount">0</b>
+        </label>
+      </div>
+      <div class="grid-scroll" id="gridScroll">
+        <div class="grid" id="grid"></div>
+        <p class="grid-empty" id="gridEmpty" hidden>No weapon in the pack clears this one. Pick your hardest hit and hope.</p>
+      </div>
+      <div class="rack-fade" aria-hidden="true"></div>
+    </aside>
+
+  </main>
+</div>
+
+<section class="notes">
+    <div class="notes-in">
+      <h3 class="n-h">The numbers are measured, not invented</h3>
+      <div class="n-grid">
+        <div class="n-card">
+          <span class="n-k">REACH</span>
+          <p>Max Feret diameter of the sprite's silhouette in source pixels — the longest distance between any two opaque pixels.</p>
+        </div>
+        <div class="n-card">
+          <span class="n-k">MASS</span>
+          <p>The count of opaque pixels in the icon. Heavier-looking weapons literally have more ink in them.</p>
+        </div>
+        <div class="n-card">
+          <span class="n-k">DMG</span>
+          <p><code>round(60 × len/70.58 + 60 × mass/2182)</code> — the pack's real maximum reach (70.58 px) and mass (2182 px) are the only constants.</p>
+        </div>
+        <div class="n-card">
+          <span class="n-k">COLOUR</span>
+          <p>Impact sparks inherit the sprite's dominant quantised colour, so a violet staff throws violet light.</p>
+        </div>
+      </div>
+      <p class="n-src">
+        Assets: <a href="https://github.com/Huu-Yuu/PixelSRPG-Forge" target="_blank" rel="noopener">PixelSRPG-Forge</a>
+        weapon icons and monster sheets (MIT-licensed repository; the sprites are MapleStory-style game art, used here as a
+        non-commercial demo). 727 of the 728 numbered icons are weapons — #392 is a five-frame "VIP chest" HUD animation and is excluded.
+        All sound is synthesised for this build.
+      </p>
+  </div>
+</section>
+
+<script src="app.js?v=27"></script>
+</body>
+</html>
